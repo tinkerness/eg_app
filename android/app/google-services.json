@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "1069606813233",
+    "firebase_url": "https://envpro-40357-default-rtdb.firebaseio.com",
+    "project_id": "envpro-40357",
+    "storage_bucket": "envpro-40357.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069606813233:android:102d470a3dd6209f3d5f10",
+        "android_client_info": {
+          "package_name": "com.example.eg_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6RDQR-AadvdZL3kG10RdcDAjXIws-xDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069606813233:android:99179342f0308fd73d5f10",
+        "android_client_info": {
+          "package_name": "com.example.enviroguardapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6RDQR-AadvdZL3kG10RdcDAjXIws-xDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
