@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
 import 'home.dart';
-// import 'Calender.dart';
-// import 'drawer.dart';
+import 'Calender.dart';
+import 'drawer.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({Key? key}) : super(key: key);
@@ -49,7 +49,3 @@ class BottomNavPage extends State<BottomNav> with TickerProviderStateMixin {
     );
   }
 }
-
-class MyDrawer {}
-
-class Calendar {}

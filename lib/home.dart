@@ -34,10 +34,11 @@ class HomePage extends State<Home> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     retrieveLatestBME680();
-    // retrieveLatestFlame();
+    retrieveLatestFlame();
   }
 
   void retrieveLatestBME680() {
+    print("in retrieveLatestBME680!");
     final DatabaseReference databaseReference =
         FirebaseDatabase.instance.ref('sensors/BME680');
     databaseReference.onValue.listen((event) {
@@ -45,9 +46,14 @@ class HomePage extends State<Home> with TickerProviderStateMixin {
 
       if (data != null && data is Map<dynamic, dynamic>) {
         // Extracting the latest humidity value
-        final latestHumidity = data.values.first['humidity'];
-        final latestPressure = data.values.first['pressure'];
-        final latestTemp = data.values.first['temperature'];
+        final latestHumidity = data.values.last['humidity'];
+        final latestPressure = data.values.last['pressure'];
+        final latestTemp = data.values.last['temperature'];
+        final bmedate = data.values.last['dayOfMonth'];
+        final bmetime = data.values.last['time'];
+        print('1.Latest Humidity from database: $latestTemp');
+        print('1.Latest Pressure from database: $latestPressure');
+        print('1.Latest Temp from database: $latestTemp');
 
         if (latestHumidity != null && latestHumidity is num) {
           setState(() {
@@ -55,52 +61,51 @@ class HomePage extends State<Home> with TickerProviderStateMixin {
             Pressure = latestPressure.toInt();
             Temp = latestTemp.toInt(); // Assuming humidity is of type double
           });
-          print('Latest Humidity from database: $Humidity');
-          print('Latest Pressure from database: $Pressure');
-          print('Latest Temp from database: $Temp');
+          print('2.Latest Humidity from database: $Humidity');
+          print('2.Latest Pressure from database: $Pressure');
+          print('2.Latest Temp from database: $Temp');
+          print('2.bmedate: $bmedate, bmetime: $bmetime');
         } else {
-          print('Invalid humidity value received from the latest document.');
+          print('2.Invalid humidity value received from the latest document.');
         }
       } else {
-        print('No data available or invalid data format.');
+        print('1.No data available or invalid data format.');
       }
     });
   }
 
-  // void retrieveLatestFlame() {
-  //   DatabaseReference Flame_ref =
-  //       FirebaseDatabase.instance.ref('sensors/Flame');
+  void retrieveLatestFlame() {
+    DatabaseReference Flame_ref =
+        FirebaseDatabase.instance.ref('sensors/Flame');
 
-  //   Flame_ref.onValue.listen((event) {
-  //     final data = event.snapshot.value;
-  //     print('1.Flame data: $Flame');
+    Flame_ref.onValue.listen((event) {
+      final data = event.snapshot.value;
+      print('1.Flame data: $Flame');
 
-  //     if (data != null && data is Map<dynamic, dynamic>) {
-  //       // // Assuming the data is a single string value
-  //       // final latestFlame = data.values.first['flameDetected'];
-  //       // print("2.latestFlame: $latestFlame");
-  //       // // final extractedData = latestFlame.substring(22, 35);
+      if (data != null && data is Map<dynamic, dynamic>) {
+        // Get the latest entry
+        final latestEntryKey = data.keys.last;
+        final latestEntry = data[latestEntryKey];
 
-  //       // Get the latest entry
-  //       final latestEntryKey = data.keys.last;
-  //       final latestEntry = data[latestEntryKey];
+        // Access specific field
+        final latestFlameDetected = latestEntry['flameDetected'];
+        final flamedate = latestEntry['dayOfMonth'];
+        final flametime = latestEntry['time'];
 
-  //       // Access specific field
-  //       final latestFlameDetected = latestEntry['flameDetected'];
+        // Assuming you're using setState within a StatefulWidget
+        setState(() {
+          Flame = latestFlameDetected == 1 ? 'Detected' : 'Not Detected';
+          // print("3.latestFlame: $latestFlame");
+          // print("4.latestFlame['flameDetected']: $latestFlame['flameDetected']");
+        });
 
-  //       // Assuming you're using setState within a StatefulWidget
-  //       setState(() {
-  //         Flame = latestFlameDetected == 1 ? 'Detected' : 'Not Detected';
-  //         // print("3.latestFlame: $latestFlame");
-  //         // print("4.latestFlame['flameDetected']: $latestFlame['flameDetected']");
-  //       });
-
-  //       print('5.Latest Flame from database: $Flame');
-  //     } else {
-  //       print('6.No data available or invalid data format.');
-  //     }
-  //   });
-  // }
+        print(
+            '5.Latest Flame from database: $Flame, day: $flamedate, time: $flametime');
+      } else {
+        print('6.No data available or invalid data format.');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -572,6 +577,5 @@ class HomePage extends State<Home> with TickerProviderStateMixin {
   }
 
   FlameDetectionData() {}
-
   // InfluxDBDataScreen() {}
 }
