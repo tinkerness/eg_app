@@ -1,19 +1,81 @@
-// import 'package:flutter/material.dart';
-// import 'package:firebase_database/firebase_database.dart';
+// import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-// class FlameDetectionData extends StatefulWidget {
-//   @override
-//   _FlameDetectionDataState createState() => _FlameDetectionDataState();
-// }
+class AllData extends StatefulWidget {
+  @override
+  _AllDataState createState() => _AllDataState();
+}
 
-// class _FlameDetectionDataState extends State<FlameDetectionData> {
-//   List<Map<String, dynamic>> flameDataList = [];
+class _AllDataState extends State<AllData> {
+  // final databaseReference = FirebaseDatabase.instance.ref().child('sensors');
+  // late DatabaseReference bmeDataReference;
+  List<Map<String, dynamic>> _BMEData = [];
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     fetchFlameData();
-//   }
+  @override
+  void initState() {
+    super.initState();
+    // bmeDataReference = databaseReference.child('BME680');
+    fetchBMEData();
+  }
+
+  // Future<void> fetchBMEData() async {
+  void fetchBMEData() async {
+    try {
+      final databaseReference = FirebaseDatabase.instance.reference();
+      final bmeDataReference = databaseReference.child('sensors/BME680');
+      DataSnapshot snapshot = (await bmeDataReference.once()) as DataSnapshot;
+
+      setState(() {
+        _BMEData = []; // Reset _BMEData here
+        Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
+        //  as Map<dynamic, dynamic>;
+        values.forEach((key, value) {
+          _BMEData.add({
+            'documentId': key,
+            'dayOfMonth': value['dayOfMonth'],
+            'time': value['time'],
+            'temperature': value['temperature'],
+            'humidity': value['humidity'],
+            'pressure': value['pressure'],
+          });
+          print('BME680 Data: $value');
+        });
+      });
+    } catch (e) {
+      print("Error fetching data: $e");
+      // Handle error if necessary
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('All Fetched Data'),
+      ),
+      body: ListView.builder(
+        itemCount: _BMEData.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(_BMEData[index]['documentId']),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Day of Month: ${_BMEData[index]['dayOfMonth']}'),
+                Text('Temperature: ${_BMEData[index]['temperature']}'),
+                Text('Humidity: ${_BMEData[index]['humidity']}'),
+                Text('Pressure: ${_BMEData[index]['pressure']}'),
+                Text('Time: ${_BMEData[index]['time']}'),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
 
 //   void fetchFlameData() {
 //     final DatabaseReference flameRef = FirebaseDatabase.instance.ref('sensors/Flame');
@@ -44,6 +106,8 @@
 
 //         setState(() {});
 //       }
+//     }, onError: (error) {
+//       print('Error fetching Flame data: $error');
 //     });
 //   }
 
@@ -72,3 +136,11 @@
 //     );
 //   }
 // }
+
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // TODO: implement build
+//     throw UnimplementedError();
+//   }
+// }}

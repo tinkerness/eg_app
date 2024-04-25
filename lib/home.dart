@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:firebase_database/firebase_database.dart';
-// import 'tempdata.dart';
+import 'tempdata.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -23,7 +23,7 @@ class HomePage extends State<Home> with TickerProviderStateMixin {
   num Temp = 25;
   num Pressure = 20;
   num Humidity = 20;
-  String Flame = '';
+  String Flame = 'not detected';
   String So2 = "25";
   String Co2 = "25";
   String Benzene = "25";
@@ -264,8 +264,7 @@ class HomePage extends State<Home> with TickerProviderStateMixin {
                       // Handle button tap
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => FlameDetectionData()),
+                        MaterialPageRoute(builder: (context) => AllData()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -576,6 +575,6 @@ class HomePage extends State<Home> with TickerProviderStateMixin {
     );
   }
 
-  FlameDetectionData() {}
+  // FlameDetectionData() {}
   // InfluxDBDataScreen() {}
 }
